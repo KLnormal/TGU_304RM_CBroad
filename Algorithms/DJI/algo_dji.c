@@ -102,3 +102,15 @@ void algo_dji_send(bsp_can_e can_e, uint16_t stdid) {
     }
     bsp_can_send(can_e,stdid,can_ary[can_e]);
 }
+
+typedef_dji_motor algo_dji_get(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id) {
+    uint8_t flag = 0;
+    while (flag < MOTOR_COUNT) {
+        if (DJI_motor[flag].can_handle == E_CAN1 && DJI_motor[flag].motor_type == motor_e && DJI_motor[flag].motor_id == id) {
+            return DJI_motor[flag];
+        }
+        flag++;
+    }
+    BSP_ASSERT(0);
+    return DJI_motor[0];
+}

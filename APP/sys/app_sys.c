@@ -4,11 +4,6 @@
 
 #include "app_sys.h"
 
-void app_sys_init(void) {
-    bsp_led_init();
-    bsp_led_set(255,255,255);
-}
-
 uint8_t led_light =255;
 int16_t direct = 1;
 

@@ -7,7 +7,6 @@
 
 #include "bsp_led.h"
 
-void app_sys_init(void);
 void app_sys_loop(void);
 
 #endif //APP_SYS_H
