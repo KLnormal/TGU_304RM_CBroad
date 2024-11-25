@@ -67,12 +67,12 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)
 
-file(GLOB_RECURSE SOURCES "Core/*.*" "Middlewares/*.*" "Drivers/*.*" "BSP/*.*" "APP/*.*" "Algorithms/*.*")
+file(GLOB_RECURSE SOURCES "Core/*.*" "Middlewares/*.*" "Drivers/*.*" "BSP/*.*" "APP/*.*" "Algorithms/*.*" "External/*.*")
 recursion_include(${CMAKE_SOURCE_DIR}/BSP)
 recursion_include(${CMAKE_SOURCE_DIR}/APP)
 recursion_include(${CMAKE_SOURCE_DIR}/MODULES)
 recursion_include(${CMAKE_SOURCE_DIR}/Algorithms)
-
+recursion_include(${CMAKE_SOURCE_DIR}/External)
 add_compile_options(-Werror)
 
 # CMSIS-DSP

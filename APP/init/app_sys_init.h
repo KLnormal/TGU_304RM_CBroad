@@ -8,6 +8,7 @@
 #include "app_harware_init.h"
 #include "algo_dji.h"
 #include "algo_DJI_normal_PID.h"
+#include "bsp_imu.h"
 
 void app_sys_init(void);
 

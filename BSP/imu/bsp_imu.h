@@ -1,23 +1,28 @@
 //
-// Created by fish on 2024/9/18.
+// Created by fish on 2024/4/27.
 //
 
-#ifndef BSP_IMU_H
-#define BSP_IMU_H
+#ifndef DM_MC_02_FRAMEWORK_BSP_IMU_H
+#define DM_MC_02_FRAMEWORK_BSP_IMU_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "BMI088driver.h"
+
+/* 通过忽略小范围变动的方法减小零飘，会导致精度降低带来误差 */
+#define CHEAT
 
 typedef struct {
-    float gyro[3], accel[3], temp;
-} bsp_imu_raw_data_t;
+    float pitch, roll, yaw;
+} bsp_imu_ins;
+typedef enum {
+    E_Gyro,
+    E_Accel,
+    E_Gyro_correct
+}imu_e;
+uint8_t imuInit();
+void imuTask();
+uint8_t imuReady();
+float* imu_get(imu_e e);
 
-void bsp_imu_init();
-bsp_imu_raw_data_t *bsp_imu_read();
+extern bsp_imu_ins ins;
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif //BSP_IMU_H
+#endif //DM_MC_02_FRAMEWORK_BSP_IMU_H
