@@ -73,6 +73,7 @@ recursion_include(${CMAKE_SOURCE_DIR}/APP)
 recursion_include(${CMAKE_SOURCE_DIR}/MODULES)
 recursion_include(${CMAKE_SOURCE_DIR}/Algorithms)
 recursion_include(${CMAKE_SOURCE_DIR}/External)
+
 add_compile_options(-Werror)
 
 # CMSIS-DSP

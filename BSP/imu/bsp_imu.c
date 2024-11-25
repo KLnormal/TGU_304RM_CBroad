@@ -23,7 +23,7 @@ bsp_imu_ins ins;
 
 uint8_t imuInit() {
     IMU_QuaternionEKF_Init(10, 0.001f, 10000000, 1, 0.001f, 0);
-    algo_pid_init(&Temperature_PID,7000,80,0,800,10000);
+    algo_pid_init(&Temperature_PID,7000,100,1,100,10000);
     HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
     while(BMI088_init());
     return 1;
@@ -82,7 +82,7 @@ void imuTask() {
         }
     }
     count ++;
-    /*bsp_uart_printf(E_UART_DEBUG, "imu temperature: %.2f\n", imu_temp);*/
+    bsp_uart_printf(E_UART_DEBUG, "imu temperature: %.2f\n", imu_temp);
     /*msgVofaSend(E_UART1, 8, (float) ins_flag, imu_temp, ins.roll, ins.pitch, ins.yaw, gyro_correct[0], gyro_correct[1], gyro_correct[2]);*/
 }
 
