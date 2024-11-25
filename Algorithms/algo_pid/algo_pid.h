@@ -14,7 +14,6 @@ typedef struct
     float err;
     float last1_err;
     float last2_err;
-    float imax;
     float sum_err;
     float max_sum;
     float Pout,Iout,Dout;
@@ -23,7 +22,7 @@ typedef struct
     uint8_t active;
 }PID_TypeDef;
 
-void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd,float imax, float maxsum, float maxout);
+void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxsum, float maxout);
 float algo_pid_calculate(PID_TypeDef *pid, float set, float real);
 
 #endif //ALGO_PID_H

@@ -20,20 +20,20 @@ void motor_id_calculate(dji_motor_type_e motor_e, uint8_t id,typedef_dji_motor *
     uint16_t std_id;
     uint16_t feedback_id;
     if (motor_e == E_M3508 || motor_e == E_M2006) {
-        std_id = 0x200 - (id-1)/4;
+        std_id = 0x200 - ((id-1)/4);
         feedback_id = 0x200 + id;
         motor_ary->feedback_id = feedback_id;
         motor_ary->std_id = std_id;
     }
     else if (motor_e == E_GM6020 && motor_ary->ctr_mode == E_DJI_Current) {
-        std_id = 0x1FE + 0X100*(id-1)/4;
-        feedback_id = 0x204 + 0X100*id;
+        std_id = 0x1FE + 0X100*((id-1)/4);
+        feedback_id = 0x204 + id;
         motor_ary->feedback_id = feedback_id;
         motor_ary->std_id = std_id;
     }
     else if (motor_e == E_GM6020 && motor_ary->ctr_mode == E_DJI_Voltage) {
-        std_id = 0x1FF + 0X100*(id-1)/4;
-        feedback_id = 0x204 + 0X100*id;
+        std_id = 0x1FF + 0X100*((id-1)/4);
+        feedback_id = 0x204 + id;
         motor_ary->feedback_id = feedback_id;
         motor_ary->std_id = std_id;
     }
@@ -66,7 +66,7 @@ void dji_can2_callback(bsp_can_msg_t *msg) {
 uint8_t can_ary[CAN_PASSAGE][PACKAGE_COUNT];
 
 void algo_dji_init(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, dji_ctr_mode_e ctr) {
-    BSP_ASSERT(id < MOTOR_COUNT);
+    BSP_ASSERT(motor_count < MOTOR_COUNT);
     DJI_motor[motor_count].can_handle = can_e;
     DJI_motor[motor_count].motor_type = motor_e;
     DJI_motor[motor_count].motor_id = id;

@@ -5,12 +5,11 @@
 #include "algo_pid.h"
 
 
-void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd,float imax, float maxsum, float maxout)
+void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxsum, float maxout)
 {
     pid->kp=Kp;
     pid->ki=Ki;
     pid->kd=Kd;
-    pid->imax=imax;
     pid->max_sum=maxsum;
     pid->max_out=maxout;
     pid->last1_err=0;
@@ -35,7 +34,8 @@ float algo_pid_calculate(PID_TypeDef *pid, float set, float real)
 
         pid->Pout = pid->kp * pid->err;
         pid->Iout = pid->ki * pid->sum_err;
-        pid->Dout = pid->kd * (pid->err - 2*pid->last1_err + pid->last2_err);
+        /*pid->Dout = pid->kd * (pid->err - 2*pid->last1_err + pid->last2_err);*/
+        pid->Dout = pid->kd * (pid->last1_err - pid->last2_err);
         pid->PIDout = pid->Pout + pid->Iout + pid->Dout;
 
         if(pid->PIDout >= pid->max_out) pid->PIDout = pid->max_out;
