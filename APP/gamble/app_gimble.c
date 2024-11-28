@@ -10,7 +10,7 @@
 #define K_degree 1
 #define K_accel 1.2
 #define K_forward 0.02579
-#define K_correct 1.1
+#define K_correct 1.05
 #define Gimbal_Ine 19923.793
 //K_forward 取决于转动惯量
 
@@ -24,8 +24,8 @@ PID_TypeDef gimbal_yaw_accel;
 float set_speed,set_accel,forward;
 float set_voltage;
 void app_gimbal_init() {
-    algo_pid_init(&gimbal_yaw_speed,0,0,0,1000,20000);
-    algo_pid_init(&gimbal_yaw_accel,0,0.0,0,1000,20000);
+    algo_pid_init(&gimbal_yaw_speed,10,0.5,0,1000,20000);
+    algo_pid_init(&gimbal_yaw_accel,2,0.3,0,1000,20000);
 }
 
 float feed_forward(float set_accel) {
@@ -38,7 +38,7 @@ float accel_control(float set_accel) {
     float accel_out= 0;
     accel_out = algo_pid_calculate(&gimbal_yaw_accel,set_accel,imu_get(E_IMU_Accel)[E_Accel_Yaw]);
     accel_out += feed_forward(set_accel);
-    return accel_out;
+    return accel_out ;
 }
 
 float app_gimbal_sum(float set_yaw) {
