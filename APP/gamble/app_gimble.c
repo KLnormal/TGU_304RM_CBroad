@@ -8,10 +8,10 @@
 #include "algo_dji.h"
 #include "bsp_imu.h"
 
-#define K_degree 5
-#define K_accel 4
+#define K_degree 3
+#define K_accel 2
 /*#define K_forward 0.02579*/
-#define K_correct 5
+#define K_correct 1.2
 
 //K_forward 取决于转动惯量
 
@@ -67,6 +67,8 @@ float app_gimbal_sum(float set_yaw) {
     set_speed = (set_yaw - ins.yaw) * K_degree;
     set_accel = (set_speed - imu_get(E_IMU_Gyro)[E_Gyro_Yaw]) * K_accel;
     set_voltage = accel_control(set_accel) + algo_pid_calculate(&gimbal_yaw_speed,set_speed,algo_dji_get(E_CAN1,E_GM6020,5).real_speed);
-    algo_dji_send(E_CAN1,0x2FF);
     return set_voltage;
 }
+
+
+void uart1_call_back() {}
