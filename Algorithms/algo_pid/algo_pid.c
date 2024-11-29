@@ -5,8 +5,7 @@
 #include "algo_pid.h"
 
 
-void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxi, float maxout)
-{
+void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxi, float maxout) {
     pid->kp=Kp;
     pid->ki=Ki;
     pid->kd=Kd;
@@ -17,10 +16,8 @@ void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxi, fl
     pid->active =1;
 }
 
-float algo_pid_calculate(PID_TypeDef *pid, float set, float real)
-{
-    if(pid->active)
-    {
+float algo_pid_calculate(PID_TypeDef *pid, float set, float real) {
+    if(pid->active) {
         pid->Set = set;
         pid->Real = real;
         pid->err = pid->Set - pid->Real;
@@ -42,6 +39,8 @@ float algo_pid_calculate(PID_TypeDef *pid, float set, float real)
 
         return pid->PIDout;
     }
-    else
-        return 0;
+    else return 0;
+}
+void algo_pid_clear(PID_TypeDef *pid) {
+    pid->active = 0;
 }
