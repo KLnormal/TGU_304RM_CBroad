@@ -23,5 +23,6 @@ typedef struct
 
 void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxi, float maxout);
 float algo_pid_calculate(PID_TypeDef *pid, float set, float real);
+void algo_pid_clear(PID_TypeDef *pid);
 
 #endif //ALGO_PID_H

@@ -4,6 +4,8 @@
 
 #include "algo_pid.h"
 
+#include <strings.h>
+
 
 void algo_pid_init(PID_TypeDef *pid,float Kp, float Ki, float Kd, float maxi, float maxout) {
     pid->kp=Kp;
@@ -42,5 +44,5 @@ float algo_pid_calculate(PID_TypeDef *pid, float set, float real) {
     else return 0;
 }
 void algo_pid_clear(PID_TypeDef *pid) {
-    pid->active = 0;
+    bzero(pid,sizeof(PID_TypeDef));
 }

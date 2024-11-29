@@ -4,9 +4,6 @@
 
 #include "app_gimble.h"
 
-#include "algo_pid.h"
-#include "algo_dji.h"
-#include "bsp_imu.h"
 
 #define K_degree 3
 #define K_accel 2
@@ -35,8 +32,10 @@ PID_TypeDef gimbal_yaw_accel;
 
 float set_speed,set_accel,forward;
 float set_voltage;
+float set_yaw =0;
 
-
+float pid_p,pid_d,pid_i;
+void gimbal_debug_api(bsp_uart_e e, uint8_t *s, uint16_t l);
 void forward_calculate() {
     K_forward = VOLTAGE_TO_I;//把电压转化为电流的反馈量（MAX16348）
     K_forward = K_forward*MAX_I/MOTOR_PRECISION;
@@ -48,6 +47,7 @@ void app_gimbal_init() {
     algo_pid_init(&gimbal_yaw_speed,10,0.5,0,1000,20000);
     algo_pid_init(&gimbal_yaw_accel,2,0.3,0,1000,20000);
     forward_calculate();
+    bsp_uart_set_callback(E_UART_DEBUG,gimbal_debug_api);
 }
 
 float feed_forward(float set_accel) {
@@ -70,5 +70,26 @@ float app_gimbal_sum(float set_yaw) {
     return set_voltage;
 }
 
-
-void uart1_call_back() {}
+//pid1:XXX.XXX,XXX.XXX,XXX.XXX
+//5+7+7+7
+void gimbal_debug_api(bsp_uart_e e, uint8_t *s, uint16_t l) {
+    if (s[0] == 'p' && s[1] == 'i' && s[2] == 'd') {
+        pid_p = (s[5]-'0')*100+(s[6]-'0')*10+(s[7]-'0')+(s[9]-'0')*0.1+(s[10]-'0')*0.01+(s[11]-'0')*0.001;
+        pid_i = (s[5+8]-'0')*100+(s[6+8]-'0')*10+(s[7+8]-'0')+(s[9+8]-'0')*0.1+(s[10+8]-'0')*0.01+(s[11+8]-'0')*0.001;
+        pid_d = (s[5+16]-'0')*100+(s[6+16]-'0')*10+(s[7+16]-'0')+(s[9+16]-'0')*0.1+(s[10+16]-'0')*0.01+(s[11+16]-'0')*0.001;
+        bsp_uart_printf(E_UART_DEBUG,"%d,%d,%d\n",pid_p,pid_i,pid_d);
+        if(s[3] == '1') {
+            algo_pid_clear(&gimbal_yaw_speed);
+            algo_pid_init(&gimbal_yaw_speed,pid_p,pid_i,pid_d,1000,20000);
+        }
+        else if(s[3] == '2') {
+            algo_pid_clear(&gimbal_yaw_accel);
+            algo_pid_init(&gimbal_yaw_accel,pid_p,pid_i,pid_d,1000,20000);
+        }
+    }
+    if (s[0] == 'y' && s[1] == 'a' && s[2] == 'w') {
+        set_yaw = (s[5]-'0')*100 + (s[6]- '0')*10 + (s[7] - '0');
+        if(s[4] == '-') set_yaw = -set_yaw;
+        bsp_uart_printf(E_UART_DEBUG,"%d\n",set_yaw);
+    }
+}
