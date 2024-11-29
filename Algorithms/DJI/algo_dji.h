@@ -7,6 +7,8 @@
 
 #include "algo_motor_def.h"
 
+extern void dji_can1_callback(bsp_can_msg_t *msg);
+extern void dji_can2_callback(bsp_can_msg_t *msg);
 
 void algo_dji_init(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, dji_ctr_mode_e ctr);
 void algo_dji_set(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, int16_t data);

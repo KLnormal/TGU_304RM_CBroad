@@ -41,7 +41,7 @@ void motor_id_calculate(dji_motor_type_e motor_e, uint8_t id,typedef_dji_motor *
 void dji_can1_callback(bsp_can_msg_t *msg) {
     uint16_t feedback_id =msg->header.StdId;
     uint8_t ary_flag = 0;
-    while ( DJI_motor[ary_flag].feedback_id != feedback_id && DJI_motor[ary_flag].can_handle== E_CAN1) {
+    while ( DJI_motor[ary_flag].feedback_id != feedback_id || DJI_motor[ary_flag].can_handle== E_CAN1) {
         ary_flag++;
         if (ary_flag >= MOTOR_COUNT) return;
     }
@@ -53,7 +53,7 @@ void dji_can1_callback(bsp_can_msg_t *msg) {
 void dji_can2_callback(bsp_can_msg_t *msg) {
     uint16_t feedback_id =msg->header.StdId;
     uint8_t ary_flag = 0;
-    while ( DJI_motor[ary_flag].feedback_id != feedback_id && DJI_motor[ary_flag].can_handle== E_CAN2) {
+    while ( DJI_motor[ary_flag].feedback_id != feedback_id || DJI_motor[ary_flag].can_handle != E_CAN2) {
         ary_flag++;
         if (ary_flag >= MOTOR_COUNT) return;
     }
@@ -64,6 +64,14 @@ void dji_can2_callback(bsp_can_msg_t *msg) {
 }
 
 uint8_t can_ary[CAN_PASSAGE][PACKAGE_COUNT];
+/*void algo_set_callback(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id,void (*f) (bsp_can_msg_t *msg)) {
+    uint8_t flag =0;
+    while (DJI_motor[flag].can_handle != can_e && DJI_motor[flag].motor_type != motor_e && DJI_motor[flag].motor_id != id) {
+        flag++;
+        BSP_ASSERT(flag < 10);
+    }
+    bsp_can_set_callback(can_e, DJI_motor[flag].feedback_id, f);
+}*/
 
 void algo_dji_init(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, dji_ctr_mode_e ctr) {
     BSP_ASSERT(motor_count < MOTOR_COUNT);
@@ -80,7 +88,7 @@ void algo_dji_init(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, dji_ct
 void algo_dji_set(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id, int16_t data) {
     uint8_t flag = 0;
     while (flag < MOTOR_COUNT) {
-        if (DJI_motor[flag].can_handle == E_CAN1 && DJI_motor[flag].motor_type == motor_e && DJI_motor[flag].motor_id == id) {
+        if (DJI_motor[flag].can_handle == can_e && DJI_motor[flag].motor_type == motor_e && DJI_motor[flag].motor_id == id) {
             DJI_motor[flag].set_data = data;
             return;
         }
@@ -106,7 +114,7 @@ void algo_dji_send(bsp_can_e can_e, uint16_t stdid) {
 typedef_dji_motor algo_dji_get(bsp_can_e can_e, dji_motor_type_e motor_e, uint8_t id) {
     uint8_t flag = 0;
     while (flag < MOTOR_COUNT) {
-        if (DJI_motor[flag].can_handle == E_CAN1 && DJI_motor[flag].motor_type == motor_e && DJI_motor[flag].motor_id == id) {
+        if (DJI_motor[flag].can_handle == can_e && DJI_motor[flag].motor_type == motor_e && DJI_motor[flag].motor_id == id) {
             return DJI_motor[flag];
         }
         flag++;
