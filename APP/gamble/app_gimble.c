@@ -18,6 +18,7 @@
 
 //下面的几个define是和电机以及云台的参数有关
 #define GIMBAL_INE 19923.793
+
 #define PI 3.14159265358979323846
 #define MOTOR_PRECISION 16384.0
 #define DIMENSION 1000000.0
@@ -71,6 +72,10 @@ float app_gimbal_sum(float set_yaw) {
 }
 
 //pid1:XXX.XXX,XXX.XXX,XXX.XXX
+//修改gimbal_yaw_speed
+//pid2:XXX.XXX,XXX.XXX,XXX.XXX
+//修改gimbal_yaw_accel
+//yaw:+XXX
 //5+7+7+7
 void gimbal_debug_api(bsp_uart_e e, uint8_t *s, uint16_t l) {
     if (s[0] == 'p' && s[1] == 'i' && s[2] == 'd') {
